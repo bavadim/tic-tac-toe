@@ -15,34 +15,8 @@ typedef struct State_struct
 {
         PLAYER  field[3][3];
         PLAYER  current_player;
+        int     value;
 } State;
-
-BOOL getTurn(State current, State *avalible)
-{
-        int i = 0, j = 0, val = 0, maxval = 0;
-        State   next_states[9];
-        int state_val[9];
-
-        int count = getNext(current, next_states);
-
-        if (!count)
-                return FALSE;
-
-        state_val[0] = -999;
-        for (i = 0; i < count; ++i)
-        {
-                val = getValue(next_states[i], current.current_player);
-                if (val > maxval)
-                {
-                        j = i;
-                        maxval = val;
-                }
-        }
-
-        memcpy(avalible, next_states + j, sizeof(State));
-        
-        return TRUE;
-}
 
 PLAYER getWinner(State current)
 {
@@ -82,35 +56,53 @@ int getNext(State current, State *next)
         return count;
 }
 
-int getValue(State state, PLAYER pl)
+int getValueAndBestChain(State *state, State *chain, int *count)
 {        
-        int i;
+        int i = 0;
         int best_index  = 0;
         int best_val    = -999;
         int len = 0;
         int val = 0;
         int coff = 0;
 
+        State chain_buff[9][100];
+        int   chain_len[9];
+
         State next_states[9];
-        len = getNext(state, next_states);
+        len = getNext(*state, next_states);
+
         //recursiion base
         if (len == 0)
         {
-                return 5 * getPlayerCoff(getWinner(state)) * getPlayerCoff(pl);
+                PLAYER winner = getWinner(*state);
+                val = winner == PLAYER1 ? 5 : -5;
+                if (winner == NOPLAYER)
+                        val = 0;
+                state->value = val;
+                memcpy(chain + *count, state, sizeof(State));
+                ++(*count);
+                return val;
         }
 
         for (i = 0; i < len; ++i)
         {
+                chain_len[i] = 0;
                 //pinalize for each level in tree
-                val = getValue(next_states[i], pl) - 1; 
-                if (val > best_val)
+                val = getValueAndBestChain(next_states + i, chain_buff[i], &chain_len[i]);
+                state->value = val;
+                if (val * getPlayerCoff(state->current_player) - 1 > best_val)
                 {
                         best_index      = i;
-                        best_val        = val; 
+                        best_val        = val;
                 }
         }
 
-        return best_val;
+        memcpy(chain + *count, chain_buff[best_index], sizeof(State) * chain_len[best_index]);
+        *count += chain_len[best_index];
+        memcpy(chain + *count, state, sizeof(State));
+        ++(*count);
+
+        return best_val - 1 * getPlayerCoff(state->current_player);
 }
 
 ///
@@ -209,18 +201,16 @@ int max_array(int a[], int num_elements)
 //
 void main()
 {
-        int i,j = 0;
+        int i = 0,j = 0;
         int count = 0;
         State st;
-        State avalible_turns[9];
+        State next[100];
 
         initializeState(&st);
 
-        count = getTurn(st, avalible_turns);
+        count = getValueAndBestChain(&st, next, &i);
 
-        if (!count)
-                return;
-
-        printState(avalible_turns[0]);
+        for (j = 0; j < i; ++j)
+                printState(next[j]);
 }
 
