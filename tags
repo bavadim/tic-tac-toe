@@ -1,0 +1,31 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BOOL	main.c	9;"	d	file:
+ERRORPLAYER	main.c	8;"	d	file:
+FALSE	main.c	11;"	d	file:
+NOPLAYER	main.c	7;"	d	file:
+PLAYER	main.c	4;"	d	file:
+PLAYER1	main.c	5;"	d	file:
+PLAYER2	main.c	6;"	d	file:
+State	main.c	/^} State;$/;"	t	typeref:struct:State_struct	file:
+State_struct	main.c	/^typedef struct State_struct$/;"	s	file:
+TRUE	main.c	10;"	d	file:
+checkColumns	main.c	/^int checkColumns(State state)$/;"	f
+checkDiagonal	main.c	/^int checkDiagonal(State state)$/;"	f
+checkRows	main.c	/^int checkRows(State state)$/;"	f
+cost	main.c	/^        int     cost;$/;"	m	struct:State_struct	file:
+current_player	main.c	/^        PLAYER  current_player;$/;"	m	struct:State_struct	file:
+field	main.c	/^        PLAYER  field[3][3];$/;"	m	struct:State_struct	file:
+fieldFull	main.c	/^BOOL fieldFull(State state)$/;"	f
+getCost	main.c	/^void getCost(State *state)$/;"	f
+getNext	main.c	/^int getNext(State current, State *next)$/;"	f
+getPlayerCoff	main.c	/^int getPlayerCoff(PLAYER player)$/;"	f
+getTurn	main.c	/^BOOL getTurn(State *inout)$/;"	f
+getWinner	main.c	/^PLAYER getWinner(State current)$/;"	f
+main	main.c	/^void main()$/;"	f
+printState	main.c	/^void printState(State st)$/;"	f
+switchPlayer	main.c	/^PLAYER switchPlayer(State *state)$/;"	f
