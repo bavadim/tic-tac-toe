@@ -5,10 +5,11 @@
 #include <assert.h>
 #include <limits.h>
 
+void searchBestSubchein(State avalible_states[10], int count, StateChain *result,     State current);
+
 void getBestChain(State current, StateChain *res_chain)
 {                
         assert(res_chain->len >= 0 && res_chain->len <= 10);
-        res_chain->val = NAN; //TODO
         
         PLAYER winner;
         if (getWinner(current, &winner))
@@ -21,29 +22,29 @@ void getBestChain(State current, StateChain *res_chain)
 
         State next[10];
         int count = getNext(current, next);
-
         assert(count > 0);
+        searchBestSubchein(next, count, res_chain,     current);
+}
+
+void searchBestSubchein(State avalible_states[10], int count, StateChain *result,     State current)
+{
         int i;
+        result->val = NAN;
         StateChain current_chain;
-        copyStateChain(*res_chain, &current_chain);
+        copyStateChain(*result, &current_chain);
         appandStateToChain(current, &current_chain);
         for (i = 0; i < count; ++i)
         {
                 StateChain tmp;
                 copyStateChain(current_chain, &tmp);
-                getBestChain(next[i], &tmp);
+                getBestChain(avalible_states[i], &tmp);
 
                 //get best turns chain value for current player (max or min)
-                if (tmp.val * getPlayerCoff(current.current_player) > res_chain->val * getPlayerCoff(current.current_player))
-                        copyStateChain(tmp, res_chain);
+                if (tmp.val * getPlayerCoff(current.current_player) > result->val * getPlayerCoff(current.current_player))
+                        copyStateChain(tmp, result);
         }
-        assert(res_chain->len >= 0 && res_chain->len <= 10);
-        assert((res_chain->val == -1) || (res_chain->val == 0) || (res_chain->val == 1));
-}
-
-void appandStateToChain(State st, StateChain *chain)
-{
-        chain->chain[(chain->len)++] = st;
+        assert(result->len >= 0 && result->len <= 10);
+        assert((result->val == -1) || (result->val == 0) || (result->val == 1));
 }
 
 BOOL getWinner(State current, PLAYER *result)
@@ -92,9 +93,12 @@ void initState(State *st)
 
 void initStateChain(StateChain *chain)
 {
-        chain->len = 0; 
-        //TODO!
-        chain->val = 0;
+        memset(chain, 0, sizeof(StateChain));
+}
+
+void appandStateToChain(State st, StateChain *chain)
+{
+        chain->chain[(chain->len)++] = st;
 }
 
 void copyStateChain(StateChain src, StateChain *dest)
@@ -109,14 +113,7 @@ void copyState(State src, State *dest)
 
 BOOL compareStates(State st1, State st2)
 {
-        if ((st1.current_player != st2.current_player))
-                return FALSE;
-        int i,j;
-        for (i = 0; i < 3; ++i)
-                for (j = 0; j < 3; ++j)
-                        if (st1.field[i][j] != st2.field[i][j])
-                                return FALSE;
-        return TRUE;
+        return (memcmp(&st1, &st2, sizeof(State)) == 0);
 }
 
 /***********************PRIVATE STUFF***********************************/
