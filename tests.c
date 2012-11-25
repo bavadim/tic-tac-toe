@@ -101,31 +101,28 @@ void getBestChainTest()
         current.field[2][0] = PLAYER1;
         current.field[2][1] = PLAYER1;
         current.current_player = PLAYER2;
-        StateChain stc;
-        initStateChain(&stc);
         StateChain res;
-        getBestChain(current, stc, &res);
+        initStateChain(&res);
+        getBestChain(current, &res);
         printStateChain(res);
         assert(res.chain[1].field[2][2] == PLAYER2);
 
         initState(&current);
         current.field[1][1] = PLAYER1;
         current.current_player = PLAYER2;
-        initStateChain(&stc);
         initStateChain(&res);
-        getBestChain(current, stc, &res);
+        getBestChain(current, &res);
         printStateChain(res);
         assert(res.val == 0);
 
-        initState(&current);
+        /*initState(&current);
         current.field[0][0] = PLAYER1;
         current.field[2][2] = PLAYER2;
         current.current_player = PLAYER1;
-        initStateChain(&stc);
         initStateChain(&res);
-        getBestChain(current, stc, &res);
+        getBestChain(current, &res);
         printStateChain(res);
-        assert(res.val == 0);
+        assert(res.val == 0);*/
 
         initState(&current);
         current.field[0][0] = PLAYER2;
@@ -136,38 +133,32 @@ void getBestChainTest()
         current.field[2][1] = PLAYER2;
         current.field[2][2] = PLAYER1;
         current.current_player = PLAYER2;
-        initStateChain(&stc);
         initStateChain(&res);
-        getBestChain(current, stc, &res);
+        getBestChain(current, &res);
         printStateChain(res);
         assert(res.val == 0);
 
         initState(&current);
         current.field[2][0] = PLAYER1;
         current.current_player = PLAYER2;
-        initStateChain(&stc);
         initStateChain(&res);
-        getBestChain(current, stc, &res);
+        getBestChain(current, &res);
         printStateChain(res);
         assert(res.val == 0);
 
         initState(&current);
         current.field[0][2] = PLAYER1;
         current.current_player = PLAYER2;
-        initStateChain(&stc);
         initStateChain(&res);
-        getBestChain(current, stc, &res);
+        getBestChain(current, &res);
         printStateChain(res);
         assert(res.val == 0);
-        
-
 
         initState(&current);
         current.field[2][2] = PLAYER1;
         current.current_player = PLAYER2;
-        initStateChain(&stc);
         initStateChain(&res);
-        getBestChain(current, stc, &res);
+        getBestChain(current, &res);
         printStateChain(res);
         assert(res.val == 0);
 
@@ -177,9 +168,8 @@ void getBestChainTest()
         current.field[1][0] = PLAYER1;
         current.field[2][0] = PLAYER2;
         current.current_player = PLAYER1;
-        initStateChain(&stc);
         initStateChain(&res);
-        getBestChain(current, stc, &res);
+        getBestChain(current, &res);
         printStateChain(res);
         assert(res.val == 0);
 }

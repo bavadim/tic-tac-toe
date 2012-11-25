@@ -31,7 +31,7 @@ void copyStateChain(StateChain src, StateChain *dest);
 void appandStateToChain(State st, StateChain *chain);
 void initStateChain(StateChain *chain);
 
-void getBestChain(State current, StateChain chain, StateChain *res_chain);
+void getBestChain(State current, StateChain *res_chain);
 BOOL getWinner(State current, PLAYER *result);
 int getNext(State current, State next[]);
 

@@ -5,72 +5,63 @@
 #include <assert.h>
 #include <limits.h>
 
-void getBestChain(State current, StateChain chain, StateChain *res_chain)
+void getBestChain(State current, StateChain *res_chain)
 {                
-        StateChain chn;
-        copyStateChain(chain, &chn);
-        appandStateToChain(current, &chn);
+        assert(res_chain->len >= 0 && res_chain->len <= 10);
+        res_chain->val = NAN; //TODO
         
         PLAYER winner;
         if (getWinner(current, &winner))
         {
-                assert((winner == 0) || (winner == -1) || (winner == 1));
-                chn.val = (winner == NOPLAYER ? 0 : getPlayerCoff(winner));
-                copyStateChain(chn, res_chain);
+                assert((winner == NOPLAYER) || (winner == PLAYER1) || (winner == PLAYER2));
+                appandStateToChain(current, res_chain);
+                res_chain->val = (winner == NOPLAYER ? 0 : getPlayerCoff(winner));
                 return;
         }
 
         State next[10];
-        res_chain->val = NAN;
-        
         int count = getNext(current, next);
 
         assert(count > 0);
         int i;
+        StateChain current_chain;
+        copyStateChain(*res_chain, &current_chain);
+        appandStateToChain(current, &current_chain);
         for (i = 0; i < count; ++i)
         {
                 StateChain tmp;
-                getBestChain(next[i], chn, &tmp);
+                copyStateChain(current_chain, &tmp);
+                getBestChain(next[i], &tmp);
 
                 //get best turns chain value for current player (max or min)
                 if (tmp.val * getPlayerCoff(current.current_player) > res_chain->val * getPlayerCoff(current.current_player))
                         copyStateChain(tmp, res_chain);
         }
-        assert(res_chain->len > 0);
+        assert(res_chain->len >= 0 && res_chain->len <= 10);
         assert((res_chain->val == -1) || (res_chain->val == 0) || (res_chain->val == 1));
 }
 
 void appandStateToChain(State st, StateChain *chain)
 {
-
         chain->chain[(chain->len)++] = st;
 }
 
 BOOL getWinner(State current, PLAYER *result)
 {
-        short res = checkRows(current); 
-        if (res != NOPLAYER)
+        int res = (checkRows(current) ^ checkColumns(current) ^ checkDiagonal(current));
+        assert((res == PLAYER1) || (res == PLAYER2) || (res == NOPLAYER));
+        
+        if ((res == PLAYER1) || (res == PLAYER2))
         {
                 *result = res;
                 return TRUE;
         }
-        res = checkColumns(current);
-        if (res != NOPLAYER)
-        {
-                *result = res;
-                return TRUE;
-        }
-        res = checkDiagonal(current);
-        if (res != NOPLAYER)
-        {
-                *result = res;
-                return TRUE;
-        }
-        if (fieldFull(current) == TRUE)
+        if (fieldFull(current))
         {
                 *result = NOPLAYER;
                 return TRUE;
         }
+        *result = ERRORPLAYER;
         return FALSE;
 }
 
@@ -95,11 +86,8 @@ int getNext(State current, State *next)
 
 void initState(State *st)
 {
+        memset(st, NOPLAYER, sizeof(State));
         st->current_player = PLAYER1;
-        int i,j;
-        for (i = 0; i < 3; ++i)
-                for (j = 0; j < 3; ++j)
-                        st->field[i][j] = NOPLAYER;
 }
 
 void initStateChain(StateChain *chain)
