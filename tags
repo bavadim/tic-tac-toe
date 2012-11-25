@@ -4,28 +4,48 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BOOL	main.c	11;"	d	file:
-ERRORPLAYER	main.c	10;"	d	file:
-FALSE	main.c	13;"	d	file:
-NOPLAYER	main.c	9;"	d	file:
-PLAYER	main.c	6;"	d	file:
-PLAYER1	main.c	7;"	d	file:
-PLAYER2	main.c	8;"	d	file:
-State	main.c	/^} State;$/;"	t	typeref:struct:State_struct	file:
-State_struct	main.c	/^typedef struct State_struct$/;"	s	file:
-TRUE	main.c	12;"	d	file:
-checkColumns	main.c	/^int checkColumns(State state)$/;"	f
-checkDiagonal	main.c	/^int checkDiagonal(State state)$/;"	f
-checkRows	main.c	/^int checkRows(State state)$/;"	f
-current_player	main.c	/^        PLAYER  current_player;$/;"	m	struct:State_struct	file:
-field	main.c	/^        PLAYER  field[3][3];$/;"	m	struct:State_struct	file:
-fieldFull	main.c	/^BOOL fieldFull(State state)$/;"	f
-getNext	main.c	/^int getNext(State current, State *next)$/;"	f
-getPlayerCoff	main.c	/^int getPlayerCoff(PLAYER player)$/;"	f
-getValueAndBestChain	main.c	/^int getValueAndBestChain(State *state, State *chain, int *count)$/;"	f
-getWinner	main.c	/^PLAYER getWinner(State current)$/;"	f
-initializeState	main.c	/^void initializeState(State *st)$/;"	f
+BOOL	eval.h	11;"	d
+ERRORPLAYER	eval.h	9;"	d
+FALSE	eval.h	13;"	d
+NAN	eval.h	10;"	d
+NOPLAYER	eval.h	8;"	d
+PLAYER	eval.h	5;"	d
+PLAYER1	eval.h	6;"	d
+PLAYER2	eval.h	7;"	d
+State	eval.h	/^} State;$/;"	t	typeref:struct:State_struct
+StateChain	eval.h	/^} StateChain;$/;"	t	typeref:struct:StateChain_struct
+StateChain_struct	eval.h	/^typedef struct StateChain_struct$/;"	s
+State_struct	eval.h	/^typedef struct State_struct$/;"	s
+TRUE	eval.h	12;"	d
+__EVAL_H__	eval.h	2;"	d
+__IO_H__	io.h	2;"	d
+__TESTS_H__	tests.h	2;"	d
+appandStateToChain	eval.c	/^void appandStateToChain(State st, StateChain *chain)$/;"	f
+chain	eval.h	/^        State chain[10];$/;"	m	struct:StateChain_struct
+checkColumns	eval.c	/^PLAYER checkColumns(State state)$/;"	f
+checkDiagonal	eval.c	/^PLAYER checkDiagonal(State state)$/;"	f
+checkRows	eval.c	/^PLAYER checkRows(State state)$/;"	f
+compareStates	eval.c	/^BOOL compareStates(State st1, State st2)$/;"	f
+copyState	eval.c	/^void copyState(State src, State *dest)$/;"	f
+copyStateChain	eval.c	/^void copyStateChain(StateChain src, StateChain *dest)$/;"	f
+current_player	eval.h	/^        PLAYER  current_player;$/;"	m	struct:State_struct
+field	eval.h	/^        PLAYER  field[3][3];$/;"	m	struct:State_struct
+fieldFull	eval.c	/^BOOL fieldFull(State state)$/;"	f
+getBestChain	eval.c	/^void getBestChain(State current, StateChain *res_chain)$/;"	f
+getBestChainTest	tests.c	/^void getBestChainTest()$/;"	f
+getNext	eval.c	/^int getNext(State current, State *next)$/;"	f
+getPlayerCoff	eval.c	/^int getPlayerCoff(PLAYER player)$/;"	f
+getWinner	eval.c	/^BOOL getWinner(State current, PLAYER *result)$/;"	f
+getWinnerTest	tests.c	/^void getWinnerTest()$/;"	f
+initState	eval.c	/^void initState(State *st)$/;"	f
+initStateChain	eval.c	/^void initStateChain(StateChain *chain)$/;"	f
+len	eval.h	/^        int   len;$/;"	m	struct:StateChain_struct
 main	main.c	/^void main()$/;"	f
-max_array	main.c	/^int max_array(int a[], int num_elements)$/;"	f
-printState	main.c	/^void printState(State st)$/;"	f
-switchPlayer	main.c	/^PLAYER switchPlayer(State *state)$/;"	f
+nextTest	tests.c	/^void nextTest()$/;"	f
+printState	io.c	/^void printState(State st)$/;"	f
+printStateChain	io.c	/^void printStateChain(StateChain chain)$/;"	f
+printStates	io.c	/^void printStates(State sts[], int len)$/;"	f
+runTests	tests.c	/^void runTests()$/;"	f
+searchBestSubchein	eval.c	/^void searchBestSubchein(int current_player_cof, State avalible_states[10], int count, StateChain *result)$/;"	f
+switchPlayer	eval.c	/^PLAYER switchPlayer(State state)$/;"	f
+val	eval.h	/^        int   val;$/;"	m	struct:StateChain_struct
