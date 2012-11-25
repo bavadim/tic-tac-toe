@@ -5,34 +5,12 @@
 #include <assert.h>
 #include <limits.h>
 
-void searchBestSubchein(State avalible_states[10], int count, StateChain *result,     State current);
-
-void getBestChain(State current, StateChain *res_chain)
-{                
-        assert(res_chain->len >= 0 && res_chain->len <= 10);
-        
-        PLAYER winner;
-        if (getWinner(current, &winner))
-        {
-                assert((winner == NOPLAYER) || (winner == PLAYER1) || (winner == PLAYER2));
-                appandStateToChain(current, res_chain);
-                res_chain->val = (winner == NOPLAYER ? 0 : getPlayerCoff(winner));
-                return;
-        }
-
-        State next[10];
-        int count = getNext(current, next);
-        assert(count > 0);
-        searchBestSubchein(next, count, res_chain,     current);
-}
-
-void searchBestSubchein(State avalible_states[10], int count, StateChain *result,     State current)
+void searchBestSubchein(int current_player_cof, State avalible_states[10], int count, StateChain *result)
 {
         int i;
         result->val = NAN;
         StateChain current_chain;
         copyStateChain(*result, &current_chain);
-        appandStateToChain(current, &current_chain);
         for (i = 0; i < count; ++i)
         {
                 StateChain tmp;
@@ -40,11 +18,30 @@ void searchBestSubchein(State avalible_states[10], int count, StateChain *result
                 getBestChain(avalible_states[i], &tmp);
 
                 //get best turns chain value for current player (max or min)
-                if (tmp.val * getPlayerCoff(current.current_player) > result->val * getPlayerCoff(current.current_player))
+                if (tmp.val * current_player_cof > result->val * current_player_cof)
                         copyStateChain(tmp, result);
         }
         assert(result->len >= 0 && result->len <= 10);
         assert((result->val == -1) || (result->val == 0) || (result->val == 1));
+}
+
+void getBestChain(State current, StateChain *res_chain)
+{                
+        assert(res_chain->len >= 0 && res_chain->len <= 10);
+        appandStateToChain(current, res_chain);
+        
+        PLAYER winner;
+        if (getWinner(current, &winner))
+        {
+                assert((winner == NOPLAYER) || (winner == PLAYER1) || (winner == PLAYER2));
+                res_chain->val = (winner == NOPLAYER ? 0 : getPlayerCoff(winner));
+                return;
+        }
+
+        State next[10];
+        int count = getNext(current, next);
+        assert(count > 0);
+        searchBestSubchein(getPlayerCoff(current.current_player), next, count, res_chain);
 }
 
 BOOL getWinner(State current, PLAYER *result)
