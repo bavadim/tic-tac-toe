@@ -1,12 +1,8 @@
 #include "eval.h"
-#include "tests.h"
-#include <stdio.h>
+#include "io.h"
 
 void main()
 {
-        nextTest();
-        getWinnerTest();
-        getBestChainTest();
 
         State st;
         initState(&st);

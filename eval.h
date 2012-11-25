@@ -7,6 +7,7 @@
 #define PLAYER2 -1 
 #define NOPLAYER 0
 #define ERRORPLAYER   INT_MAX
+#define NAN   INT_MIN
 #define BOOL    int
 #define TRUE    1
 #define FALSE   0
@@ -18,6 +19,7 @@ typedef struct State_struct
 } State;
 void initState(State *st);
 void copyState(State src, State *dest);
+BOOL compareStates(State st1, State st2);
 
 typedef struct StateChain_struct
 {
@@ -32,9 +34,5 @@ void initStateChain(StateChain *chain);
 void getBestChain(State current, StateChain chain, StateChain *res_chain);
 BOOL getWinner(State current, PLAYER *result);
 int getNext(State current, State next[]);
-
-void prinsState(State st);
-void prinsStates(State sts[], int len);
-void printStateChain(StateChain chain);
 
 #endif

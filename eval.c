@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <limits.h>
 
-/*********************PUBLIC STUFF******************************************/
 void getBestChain(State current, StateChain chain, StateChain *res_chain)
 {                
         StateChain chn;
@@ -22,43 +21,23 @@ void getBestChain(State current, StateChain chain, StateChain *res_chain)
         }
 
         State next[10];
-        StateChain tmp;
-        StateChain best_chain;
-        if (current.current_player == PLAYER1)
-        {
-                best_chain.val = (INT_MIN + 1);
-                tmp.val = (INT_MIN + 1);
-        }
-        else if (current.current_player == PLAYER2)
-        {
-                best_chain.val = (INT_MAX - 1);
-                tmp.val = (INT_MAX - 1);
-        }
-        else
-                assert(FALSE);
+        res_chain->val = NAN;
+        
         int count = getNext(current, next);
 
         assert(count > 0);
         int i;
         for (i = 0; i < count; ++i)
         {
+                StateChain tmp;
                 getBestChain(next[i], chn, &tmp);
 
-                if (current.current_player == PLAYER1)
-                {
-                        if (tmp.val > best_chain.val)
-                                copyStateChain(tmp, &best_chain);
-                } else if (current.current_player == PLAYER2)
-                {
-                        if (tmp.val < best_chain.val)
-                                copyStateChain(tmp, &best_chain);
-                } else
-                        assert(FALSE);
+                //get best turns chain value for current player (max or min)
+                if (tmp.val * getPlayerCoff(current.current_player) > res_chain->val * getPlayerCoff(current.current_player))
+                        copyStateChain(tmp, res_chain);
         }
-        assert(best_chain.len > 0);
-        assert((best_chain.val == -1) || (best_chain.val == 0) || (best_chain.val == 1));
-
-        copyStateChain(best_chain, res_chain);
+        assert(res_chain->len > 0);
+        assert((res_chain->val == -1) || (res_chain->val == 0) || (res_chain->val == 1));
 }
 
 void appandStateToChain(State st, StateChain *chain)
@@ -114,45 +93,6 @@ int getNext(State current, State *next)
         return count;
 }
 
-void printState(State st)
-{
-        printf("\nPlayer %+i turn!\n", st.current_player);
-        int i,j;
-        for (i = 0; i < 3; ++i)
-        {
-                for (j = 0; j < 3; ++j)
-                {
-                        char* cell_val = " ";
-                        if (st.field[i][j] == PLAYER1)
-                                cell_val = "X";
-                        else if (st.field[i][j] == PLAYER2)
-                                cell_val = "0";
-                        else if (st.field[i][j] == NOPLAYER)
-                                cell_val = " ";
-                        else
-                                cell_val = "ERR";
-
-                        printf("%s|", cell_val);
-                }
-                printf("\n");
-        }
-}
-
-void printStates(State sts[], int len)
-{
-        int i;
-        for (i = 0; i < len; ++i)
-                printState(sts[i]);
-}
-
-void printStateChain(StateChain chain)
-{
-        printf("Optimal game. Stages count: %i, Points: %i\n", chain.len, chain.val);
-        int i;
-        for (i = 0; i < chain.len; ++i)
-                printState(chain.chain[i]);
-}
-
 void initState(State *st)
 {
         st->current_player = PLAYER1;
@@ -177,6 +117,18 @@ void copyStateChain(StateChain src, StateChain *dest)
 void copyState(State src, State *dest)
 {
         memcpy(dest, &src, sizeof(State));
+}
+
+BOOL compareStates(State st1, State st2)
+{
+        if ((st1.current_player != st2.current_player))
+                return FALSE;
+        int i,j;
+        for (i = 0; i < 3; ++i)
+                for (j = 0; j < 3; ++j)
+                        if (st1.field[i][j] != st2.field[i][j])
+                                return FALSE;
+        return TRUE;
 }
 
 /***********************PRIVATE STUFF***********************************/

@@ -3,16 +3,11 @@
 #include <stdio.h>
 #include "assert.h"
 
-BOOL compareStates(State st1, State st2)
+void runTests()
 {
-        if ((st1.current_player != st2.current_player))
-                return FALSE;
-        int i,j;
-        for (i = 0; i < 3; ++i)
-                for (j = 0; j < 3; ++j)
-                        if (st1.field[i][j] != st2.field[i][j])
-                                return FALSE;
-        return TRUE;
+        nextTest();
+        getWinnerTest();
+        getBestChainTest();
 }
 
 void nextTest()
@@ -122,7 +117,7 @@ void getBestChainTest()
         printStateChain(res);
         assert(res.val == 0);
 
-        /*initState(&current);
+        initState(&current);
         current.field[0][0] = PLAYER1;
         current.field[2][2] = PLAYER2;
         current.current_player = PLAYER1;
@@ -130,7 +125,7 @@ void getBestChainTest()
         initStateChain(&res);
         getBestChain(current, stc, &res);
         printStateChain(res);
-        assert(res.val == 0);*/
+        assert(res.val == 0);
 
         initState(&current);
         current.field[0][0] = PLAYER2;

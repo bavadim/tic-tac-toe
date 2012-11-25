@@ -1,5 +1,5 @@
-#ifndef __EVAL_H__
-#define __EVAL_H__
+#ifndef __TESTS_H__
+#define __TESTS_H__
 
 
 void nextTest();
