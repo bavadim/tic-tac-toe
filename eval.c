@@ -82,7 +82,6 @@ int getNext(State current, State *next)
         return count;
 }
 
-
 State getStateChainTop(const StateChain *chain)
 {
         assert (chain->len > 0);
