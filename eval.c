@@ -68,18 +68,25 @@ int getNext(State current, State *next)
         PLAYER old_player = current.current_player;
         current.current_player = switchPlayer(current);
 
-        int i,j;
+        int row, cel;
         int count = 0;
-        for (i = 0; i < 3; ++i)
-                for (j = 0; j < 3; ++j)
-                        if ((current.field[i][j] != PLAYER1) && (current.field[i][j] != PLAYER2))
+        for (row = 0; row < 3; ++row)
+                for (cel = 0; cel < 3; ++cel)
+                        if ((current.field[row][cel] != PLAYER1) && (current.field[row][cel] != PLAYER2))
                         {
                                 copyState(current, (next + count));
-                                next[count].field[i][j] = old_player;
+                                next[count].field[row][cel] = old_player;
                                 ++count;
                         }
 
         return count;
+}
+
+
+State getStateChainTop(const StateChain *chain)
+{
+        assert (chain->len > 0);
+        return chain->chain[1];
 }
 
 void initState(State *st)
@@ -113,6 +120,26 @@ BOOL compareStates(State st1, State st2)
         return (memcmp(&st1, &st2, sizeof(State)) == 0);
 }
 
+void swapState(State *st1, State *st2)
+{
+        State tmp;
+        copyState(*st1, &tmp);
+        copyState(*st2, st1);
+        copyState(tmp, st2);
+}
+
+PLAYER switchPlayer(State state)
+{
+        PLAYER res;
+        if (state.current_player == PLAYER1)
+                return PLAYER2;
+        else if (state.current_player == PLAYER2)
+                return PLAYER1;
+        else if (state.current_player == NOPLAYER)
+                return NOPLAYER;
+        assert(FALSE);
+        return ERRORPLAYER;
+}
 /***********************PRIVATE STUFF***********************************/
 int getPlayerCoff(PLAYER player)
 {
@@ -121,22 +148,21 @@ int getPlayerCoff(PLAYER player)
 
 PLAYER checkRows(State state)
 {
-        int i;
-
-        for (i = 0; i < 3; ++i)
-                if (state.field[i][0] == state.field[i][1] && state.field[i][0] == state.field[i][2]
-                        && state.field[i][0] != NOPLAYER)
-                        return state.field[i][0];
+        int row;
+        for (row = 0; row < 3; ++row)
+                if (state.field[row][0] == state.field[row][1] && state.field[row][0] == state.field[row][2]
+                        && state.field[row][0] != NOPLAYER)
+                        return state.field[row][0];
         return NOPLAYER;
 }
 
 PLAYER checkColumns(State state)
 {
-        int i;
-        for (i = 0; i < 3; ++i)
-                if ((state.field[0][i] == state.field[1][i]) && (state.field[0][i] == state.field[2][i])
-                                && (state.field[0][i] != NOPLAYER))
-                        return state.field[0][i];
+        int col;
+        for (col = 0; col < 3; ++col)
+                if ((state.field[0][col] == state.field[1][col]) && (state.field[0][col] == state.field[2][col])
+                                && (state.field[0][col] != NOPLAYER))
+                        return state.field[0][col];
         return NOPLAYER;
 }
 
@@ -152,26 +178,11 @@ PLAYER checkDiagonal(State state)
 
 BOOL fieldFull(State state)
 {
-        int i, j;
-
-        for (i = 0; i < 3; ++i)
-                for (j = 0; j < 3; ++j)
-                        if (state.field[i][j] == NOPLAYER)
+        int row, col;
+        for (row = 0; row < 3; ++row)
+                for (col = 0; col < 3; ++col)
+                        if (state.field[row][col] == NOPLAYER)
                                 return FALSE;
         return TRUE;
 }
-
-PLAYER switchPlayer(State state)
-{
-        PLAYER res;
-        if (state.current_player == PLAYER1)
-                return PLAYER2;
-        else if (state.current_player == PLAYER2)
-                return PLAYER1;
-        else if (state.current_player == NOPLAYER)
-                return NOPLAYER;
-        assert(FALSE);
-        return ERRORPLAYER;
-}
-
 
