@@ -38,4 +38,5 @@ BOOL getWinner(State current, PLAYER *result);
 int getNext(State current, State next[]);
 PLAYER switchPlayer(State state);
 
+BOOL calcTurn(State in, State *out);
 #endif

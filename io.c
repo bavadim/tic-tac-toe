@@ -1,14 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
+#include <unistd.h>
 
 #include "io.h"
-
-char* strsub(const char* str, int from, int count)
-{
-        if (strlen(str) < from + count)
-                return NULL;
-        return strndup(str + from, count);
-}
 
 void strupper(const char* in, char *out, int outlen)
 {
@@ -27,7 +22,9 @@ void doTurn(State in, State *out, int row, int cel)
 
 BOOL isCellAvalible(State st, int row, int col)
 {
-        if (st.field[row][col] == NOPLAYER)
+        if ((row >= 0) && (row < 3) 
+                        && (col >= 0) && (col < 3) 
+                        && (st.field[row][col] == NOPLAYER))
                 return TRUE;
         return FALSE;
 }
@@ -43,7 +40,6 @@ char* getPlayerSign(PLAYER p)
 
 void printState(State st)
 {
-        printf("\nPlayer %s turn!\n", getPlayerSign(st.current_player));
         int row, cel;
         printf("    C1 C2 C3\n\n");
         for (row = 0; row < 3; ++row)
@@ -53,6 +49,18 @@ void printState(State st)
                         printf("%s|", getPlayerSign(st.field[row][cel]));
                 printf("\n");
         }
+        printf("\n");
+        
+        PLAYER winner;
+        if (!getWinner(st, &winner))
+        {
+                printf("Player %s turn!\n", getPlayerSign(st.current_player));
+                return;
+        }
+        if (winner == NOPLAYER)
+                printf("Dead heat!\n");
+        else if (winner != ERRORPLAYER)
+                printf("Player %s wins!\n", getPlayerSign(winner));
 }
 
 void printStates(State sts[], int len)
@@ -70,56 +78,30 @@ void printStateChain(StateChain chain)
                 printState(chain.chain[i]);
 }
 
-BOOL parseTurn(const char *input, int* row, int* col)
-{
-        *row = -1; 
-        *col = -1;
-
-        char* input_row = strsub(input, 0, 2);
-        char* input_col = strsub(input, 2, 2);
-
-        char* avalible_actions = "R1R2R3C1C2C3";
-        int i;
-        for (i = 0; i < 6; i = i + 2)
-        {
-                if (strcmp(strsub(avalible_actions, i, 2), input_row) == 0)
-                {
-                        *row = i / 2;
-                        break;
-                }
-        }
-        for (i = 6; i < 12; i = i + 2)
-        {
-                if (strcmp(strsub(avalible_actions, i, 2), input_col) == 0)
-                {
-                        *col = i / 2 - 3;
-                        break;
-                }
-        }
-
-        if ((*row == -1) || (*col == -1))
-                return FALSE;
-
-        return TRUE;
-}
-
 BOOL askTurn(State in, State *out)
 {
-        printState(in);
-        printf("\nYour turn (R<num>C<num> or q to quit): ");
+        printf("Your turn (RowNum ColumnNum, or <Ctrl + C> for Quit): ");
         
         char input[128];
-        while (fgets (input, 128, stdin) != NULL)
+        int row, col;
+        while (TRUE)
         {
-                char buff[128];
-                strupper(input, buff, 128);
-                if (strstr("q", buff) != NULL)
-                        return FALSE;
-
-                int row, col;
-                if (!parseTurn(buff, &row, &col) || !isCellAvalible(in, row, col))
+                int res = scanf("%i %i", &row, &col); 
+                if (res == EOF)
                 {
-                        printf("Turn %s is invalid. Please try again\n", buff);
+                        printf("error %i occure", errno);
+                        return FALSE;
+                }
+                if (res != 2)
+                {
+                        printf("Invalid input. Please try again:\n");
+                        scanf("%*[^\n]"); //clean stdin
+                        continue;
+                }
+                --row; --col;
+                if (!isCellAvalible(in, row, col))
+                {
+                        printf("Cell R%i C%i is occupied or invalid. Please try again: ", row + 1, col + 1);
                         continue;
                 }
                 doTurn(in, out, row, col);

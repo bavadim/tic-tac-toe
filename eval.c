@@ -5,6 +5,17 @@
 #include <assert.h>
 #include <limits.h>
 
+BOOL calcTurn(State in, State *out)
+{
+        StateChain res;
+        initStateChain(&res);
+        getBestChain(in, &res);
+        if (res.len == 0)
+                return FALSE;
+        copyState(getStateChainTop(&res), out);
+        return TRUE;
+}
+
 void searchBestSubchein(int current_player_cof, State avalible_states[10], int count, StateChain *result)
 {
         int i;

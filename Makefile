@@ -9,5 +9,6 @@ run_test: build_lib build_test
 	bin/test
 create_dir:
 	mkdir -p bin
+	ctags -R
 clean:
 	rm -rf bin

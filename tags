@@ -21,6 +21,8 @@ __EVAL_H__	eval.h	2;"	d
 __IO_H__	io.h	2;"	d
 __TESTS_H__	tests.h	2;"	d
 appandStateToChain	eval.c	/^void appandStateToChain(State st, StateChain *chain)$/;"	f
+askTurn	io.c	/^BOOL askTurn(State in, State *out)$/;"	f
+calcTurn	eval.c	/^BOOL calcTurn(State in, State *out)$/;"	f
 chain	eval.h	/^        State chain[10];$/;"	m	struct:StateChain_struct
 checkColumns	eval.c	/^PLAYER checkColumns(State state)$/;"	f
 checkDiagonal	eval.c	/^PLAYER checkDiagonal(State state)$/;"	f
@@ -29,23 +31,32 @@ compareStates	eval.c	/^BOOL compareStates(State st1, State st2)$/;"	f
 copyState	eval.c	/^void copyState(State src, State *dest)$/;"	f
 copyStateChain	eval.c	/^void copyStateChain(StateChain src, StateChain *dest)$/;"	f
 current_player	eval.h	/^        PLAYER  current_player;$/;"	m	struct:State_struct
+doTurn	io.c	/^void doTurn(State in, State *out, int row, int cel)$/;"	f
 field	eval.h	/^        PLAYER  field[3][3];$/;"	m	struct:State_struct
 fieldFull	eval.c	/^BOOL fieldFull(State state)$/;"	f
 getBestChain	eval.c	/^void getBestChain(State current, StateChain *res_chain)$/;"	f
 getBestChainTest	tests.c	/^void getBestChainTest()$/;"	f
 getNext	eval.c	/^int getNext(State current, State *next)$/;"	f
 getPlayerCoff	eval.c	/^int getPlayerCoff(PLAYER player)$/;"	f
+getPlayerSign	io.c	/^char* getPlayerSign(PLAYER p)$/;"	f
+getStateChainTop	eval.c	/^State getStateChainTop(const StateChain *chain)$/;"	f
 getWinner	eval.c	/^BOOL getWinner(State current, PLAYER *result)$/;"	f
 getWinnerTest	tests.c	/^void getWinnerTest()$/;"	f
+goNext2Turn	main.c	/^BOOL goNext2Turn(State in, State *out, BOOL isPlayer1Human, BOOL isPlayer2Human)$/;"	f
 initState	eval.c	/^void initState(State *st)$/;"	f
 initStateChain	eval.c	/^void initStateChain(StateChain *chain)$/;"	f
+isCellAvalible	io.c	/^BOOL isCellAvalible(State st, int row, int col)$/;"	f
 len	eval.h	/^        int   len;$/;"	m	struct:StateChain_struct
 main	main.c	/^void main()$/;"	f
+main	test.c	/^void main()$/;"	f
 nextTest	tests.c	/^void nextTest()$/;"	f
 printState	io.c	/^void printState(State st)$/;"	f
 printStateChain	io.c	/^void printStateChain(StateChain chain)$/;"	f
 printStates	io.c	/^void printStates(State sts[], int len)$/;"	f
+runGameCycle	main.c	/^void runGameCycle(BOOL isP1Human, BOOL isP2Human)$/;"	f
 runTests	tests.c	/^void runTests()$/;"	f
 searchBestSubchein	eval.c	/^void searchBestSubchein(int current_player_cof, State avalible_states[10], int count, StateChain *result)$/;"	f
+strupper	io.c	/^void strupper(const char* in, char *out, int outlen)$/;"	f
+swapState	eval.c	/^void swapState(State *st1, State *st2)$/;"	f
 switchPlayer	eval.c	/^PLAYER switchPlayer(State state)$/;"	f
 val	eval.h	/^        int   val;$/;"	m	struct:StateChain_struct
