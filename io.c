@@ -89,12 +89,12 @@ BOOL askTurn(State in, State *out)
                 int res = scanf("%i %i", &row, &col); 
                 if (res == EOF)
                 {
-                        printf("error %i occure", errno);
+                        printf("error %i occure\n", errno);
                         return FALSE;
                 }
                 if (res != 2)
                 {
-                        printf("Invalid input. Please try again:\n");
+                        printf("Invalid input. Please try again: ");
                         scanf("%*[^\n]"); //clean stdin
                         continue;
                 }
